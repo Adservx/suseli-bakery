@@ -7,12 +7,14 @@ import {
     itemVariants,
     floatAnimation
 } from '../utils/animations.jsx';
+import { useIsMobile } from '../hooks/useIsMobile.jsx';
 
 function HomePage() {
     const heroRef = useRef(null);
     const featuresRef = useRef(null);
     const specialsRef = useRef(null);
     const testimonialsRef = useRef(null);
+    const isMobile = useIsMobile();
 
     // Hero 3D scroll
     const { scrollYProgress: heroProgress } = useScroll({
@@ -22,8 +24,8 @@ function HomePage() {
 
     const heroY = useTransform(heroProgress, [0, 1], ['0%', '50%']);
     const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
-    const heroScale = useTransform(heroProgress, [0, 1], [1, 1.3]);
-    const heroRotateX = useTransform(heroProgress, [0, 1], [0, 25]);
+    const heroScale = useTransform(heroProgress, [0, 1], [1, isMobile ? 1.1 : 1.3]);
+    const heroRotateX = useTransform(heroProgress, [0, 1], [0, isMobile ? 10 : 25]);
 
     // Features 3D
     const { scrollYProgress: featuresProgress } = useScroll({
@@ -31,8 +33,8 @@ function HomePage() {
         offset: ["start end", "center center", "end start"]
     });
 
-    const featuresRotateY = useTransform(featuresProgress, [0, 0.5, 1], [-25, 0, 25]);
-    const featuresZ = useTransform(featuresProgress, [0, 0.5, 1], [-200, 0, -200]);
+    const featuresRotateY = useTransform(featuresProgress, [0, 0.5, 1], [isMobile ? -5 : -25, 0, isMobile ? 5 : 25]);
+    const featuresZ = useTransform(featuresProgress, [0, 0.5, 1], [isMobile ? -50 : -200, 0, isMobile ? -50 : -200]);
 
     // Specials 3D
     const { scrollYProgress: specialsProgress } = useScroll({
@@ -40,8 +42,8 @@ function HomePage() {
         offset: ["start end", "center center", "end start"]
     });
 
-    const specialsRotateX = useTransform(specialsProgress, [0, 0.5, 1], [20, 0, -20]);
-    const specialsScale = useTransform(specialsProgress, [0, 0.5, 1], [0.85, 1, 0.85]);
+    const specialsRotateX = useTransform(specialsProgress, [0, 0.5, 1], [isMobile ? 5 : 20, 0, isMobile ? -5 : -20]);
+    const specialsScale = useTransform(specialsProgress, [0, 0.5, 1], [isMobile ? 0.95 : 0.85, 1, isMobile ? 0.95 : 0.85]);
 
     // Testimonials 3D
     const { scrollYProgress: testimonialsProgress } = useScroll({
@@ -49,7 +51,7 @@ function HomePage() {
         offset: ["start end", "center center", "end start"]
     });
 
-    const testimonialsRotateY = useTransform(testimonialsProgress, [0, 0.5, 1], [30, 0, -30]);
+    const testimonialsRotateY = useTransform(testimonialsProgress, [0, 0.5, 1], [isMobile ? 10 : 30, 0, isMobile ? -10 : -30]);
 
     const springConfig = { stiffness: 100, damping: 30 };
     const heroYSpring = useSpring(heroY, springConfig);
